@@ -1,0 +1,40 @@
+<div
+  class="container"
+  *ngIf="prediccion"
+>
+
+  <h1>Predicción de Demanda IA</h1>
+
+  <div class="card">
+
+    <h2>Hora Pico Detectada</h2>
+
+    <div class="valor">
+      {{ prediccion.hora_pico }}
+    </div>
+
+    <br>
+
+    <h3>
+      Citas detectadas:
+      {{ prediccion.cantidad_citas }}
+    </h3>
+
+    <h3
+      [ngClass]="{
+        'demanda-normal':
+          prediccion.recomendacion.includes('normal'),
+
+        'demanda-media':
+          prediccion.recomendacion.includes('media'),
+
+        'demanda-alta':
+          prediccion.recomendacion.includes('alta')
+      }"
+    >
+      {{ prediccion.recomendacion }}
+    </h3>
+
+  </div>
+
+</div>

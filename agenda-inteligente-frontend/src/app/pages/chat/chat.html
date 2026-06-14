@@ -1,0 +1,160 @@
+<div class="chat-container">
+
+  <h1>Asistente Inteligente</h1>
+
+  <div class="mensajes">
+
+    <ng-container *ngFor="let m of mensajes">
+
+      <!-- MENSAJES NORMALES -->
+
+      <div
+        *ngIf="
+          m.tipo !== 'horarios' &&
+          m.tipo !== 'citas'
+        "
+        [class.usuario]="m.tipo === 'usuario'"
+        [class.bot]="m.tipo === 'bot'"
+        style="white-space: pre-line"
+      >
+        {{ m.texto }}
+      </div>
+
+      <!-- HORARIOS -->
+
+      <div
+        *ngIf="m.tipo === 'horarios'"
+        class="bot horarios-container"
+      >
+
+        <div>
+          Horarios disponibles:
+        </div>
+
+        <br>
+
+        <button
+          *ngFor="let h of m.horarios"
+          (click)="seleccionarHorario(h)"
+          class="horario-btn"
+        >
+          {{ h }}
+        </button>
+
+      </div>
+
+      <!-- CITAS -->
+
+      <div
+        *ngIf="m.tipo === 'citas'"
+        class="bot horarios-container"
+      >
+
+        <div>
+          Mis citas:
+        </div>
+
+        <br>
+
+        <div
+          *ngFor="let c of m.citas"
+          class="cita-card"
+        >
+
+          <div>
+            <strong>ID:</strong>
+            {{ c.id }}
+          </div>
+
+          <div>
+            <strong>Fecha:</strong>
+            {{ c.fecha }}
+          </div>
+
+          <div>
+            <strong>Estado:</strong>
+            {{ c.estado || 'vigente' }}
+          </div>
+
+          <br>
+
+          <!-- IMPORTANTE:
+               Eliminamos el botón Seleccionar
+               porque estaba enviando el ID al chat
+               y consumía Gemini innecesariamente -->
+
+          <button
+            class="horario-btn"
+            (click)="verPrediccion(c.id)"
+          >
+            Ver Predicción IA
+          </button>
+
+        </div>
+
+      </div>
+
+    </ng-container>
+
+  </div>
+
+  <!-- PANEL DE PREDICCIÓN -->
+
+  <div
+    *ngIf="prediccion"
+    class="prediccion-card"
+  >
+
+    <h3>
+      Predicción IA
+    </h3>
+
+    <hr>
+
+    <p>
+      <strong>ID cita:</strong>
+      {{ prediccion.cita_id }}
+    </p>
+
+    <p>
+      <strong>Pacientes antes:</strong>
+      {{ prediccion.pacientes_antes }}
+    </p>
+
+    <p>
+      <strong>Duración promedio:</strong>
+      {{ prediccion.duracion_promedio }}
+      min
+    </p>
+
+    <p>
+      <strong>Tiempo estimado de espera:</strong>
+      {{ prediccion.tiempo_espera }}
+      min
+    </p>
+
+    <p *ngIf="prediccion.nivel_demanda">
+      <strong>Nivel de demanda:</strong>
+      {{ prediccion.nivel_demanda }}
+    </p>
+
+  </div>
+
+  <div class="input-area">
+
+    <input
+      [(ngModel)]="mensaje"
+      placeholder="Escriba un mensaje"
+      (keyup.enter)="enviar()"
+    />
+
+    <button
+      type="button"
+      (click)="enviar()"
+    >
+      Enviar
+    </button>
+
+  </div>
+
+</div>

@@ -1,0 +1,39 @@
+<div class="container">
+
+  <h1>Agenda Semanal Inteligente</h1>
+
+  <div
+    class="dia"
+    *ngFor="let dia of dias"
+  >
+
+    <h2>{{ dia }}</h2>
+
+    <div
+      class="slot"
+      *ngFor="let slot of agenda[dia]"
+    >
+
+      <span>
+
+        {{ slot.hora }}
+
+      </span>
+
+      <span
+        *ngIf="slot.estado === 'libre'"
+      >
+        🟢 Libre
+      </span>
+
+      <span
+        *ngIf="slot.estado === 'ocupado'"
+      >
+        🔴 Ocupado
+      </span>
+
+    </div>
+
+  </div>
+
+</div>

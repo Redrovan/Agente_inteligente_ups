@@ -1,0 +1,83 @@
+.chat-container {
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
+}
+
+.mensajes {
+  height: 500px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+.usuario {
+  text-align: right;
+  margin-bottom: 10px;
+}
+
+.bot {
+  text-align: left;
+  margin-bottom: 10px;
+}
+
+.input-area {
+  display: flex;
+  gap: 10px;
+}
+
+input {
+  flex: 1;
+  padding: 10px;
+}
+
+button {
+  padding: 10px 15px;
+}
+
+.horarios-container {
+  margin-top: 10px;
+}
+
+.horario-btn {
+  display: block;
+  width: 100%;
+  margin-top: 8px;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.cita-card {
+
+  background: #f5f5f5;
+
+  padding: 12px;
+
+  margin-top: 10px;
+
+  border-radius: 10px;
+
+}
+
+.prediccion-card {
+
+  margin-top: 20px;
+
+  padding: 20px;
+
+  border-radius: 12px;
+
+  border: 1px solid #ddd;
+
+  background: white;
+
+}
+
+.prediccion-card h3 {
+
+  margin-top: 0;
+
+}

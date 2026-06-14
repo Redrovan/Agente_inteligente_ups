@@ -1,0 +1,121 @@
+<div class="container">
+
+  <h1>Configurar Disponibilidad</h1>
+
+  <div class="formulario">
+
+    <label>Día</label>
+
+    <select [(ngModel)]="formulario.dia_semana">
+
+      <option value="MONDAY">Lunes</option>
+      <option value="TUESDAY">Martes</option>
+      <option value="WEDNESDAY">Miércoles</option>
+      <option value="THURSDAY">Jueves</option>
+      <option value="FRIDAY">Viernes</option>
+
+    </select>
+
+    <label>Hora Inicio</label>
+
+    <input
+      type="time"
+      [(ngModel)]="formulario.hora_inicio"
+    >
+
+    <label>Hora Fin</label>
+
+    <input
+      type="time"
+      [(ngModel)]="formulario.hora_fin"
+    >
+
+    <label>Duración (min)</label>
+
+    <input
+      type="number"
+      [(ngModel)]="formulario.duracion_cita"
+    >
+
+    <button (click)="guardar()">
+
+      {{ modoEdicion ? 'Actualizar' : 'Guardar' }}
+
+    </button>
+
+  </div>
+
+  <hr>
+
+  <h2>Disponibilidad Registrada</h2>
+
+  <p>
+    Total registros:
+    {{ disponibilidades.length }}
+  </p>
+
+  <table>
+
+    <thead>
+
+      <tr>
+
+        <th>Día</th>
+        <th>Inicio</th>
+        <th>Fin</th>
+        <th>Duración</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+
+      </tr>
+
+    </thead>
+
+    <tbody>
+
+      <tr *ngFor="let d of disponibilidades">
+
+        <td>{{ d.dia_semana }}</td>
+
+        <td>{{ d.hora_inicio }}</td>
+
+        <td>{{ d.hora_fin }}</td>
+
+        <td>{{ d.duracion_cita }} min</td>
+
+        <td>
+
+          <span *ngIf="d.activo">
+            ✅ Activo
+          </span>
+
+          <span *ngIf="!d.activo">
+            ❌ Inactivo
+          </span>
+
+        </td>
+
+        <td>
+
+          <button
+            (click)="editar(d)"
+          >
+            Editar
+          </button>
+
+          <button
+            *ngIf="d.activo"
+            (click)="desactivar(d.id)"
+          >
+            Desactivar
+          </button>
+
+        </td>
+
+      </tr>
+
+    </tbody>
+
+  </table>
+
+</div>

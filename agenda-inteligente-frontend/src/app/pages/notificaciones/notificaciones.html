@@ -1,0 +1,26 @@
+<div class="container">
+
+  <h1>
+    Centro de Notificaciones
+  </h1>
+
+  <div
+    *ngFor="let n of notificaciones"
+    class="card"
+  >
+
+    <h3>
+      Paciente #{{ n.paciente_id }}
+    </h3>
+
+    <p>
+      {{ n.mensaje }}
+    </p>
+
+    <small>
+      {{ n.fecha }}
+    </small>
+
+  </div>
+
+</div>

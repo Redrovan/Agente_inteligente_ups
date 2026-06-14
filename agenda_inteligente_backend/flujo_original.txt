@@ -1,0 +1,237 @@
+    # PASO 1
+    # ESPECIALIDAD
+    # =====================================
+
+    if texto.lower() == "quiero una cita":
+
+        especialidades = (
+            db.query(Medico.especialidad)
+            .distinct()
+            .all()
+        )
+
+        lista = [
+            e[0]
+            for e in especialidades
+        ]
+
+        guardar_sesion(
+            db,
+            telefono,
+            "esperando_especialidad"
+        )
+
+        return {
+            "especialidades": lista,
+            "respuesta":
+            "Seleccione una especialidad."
+        }
+
+    # =====================================
+    # PASO 2
+    # USUARIO SELECCIONA ESPECIALIDAD
+    # =====================================
+
+    if (
+        sesion and
+        sesion.estado == "esperando_especialidad"
+    ):
+
+        medicos = (
+            db.query(Medico)
+            .all()
+        )
+
+        especialidades = list(
+            set(
+                [
+                    m.especialidad
+                    for m in medicos
+                ]
+            )
+        )
+
+        especialidad_seleccionada = None
+
+        if texto.isdigit():
+
+            indice = int(texto) - 1
+
+            if 0 <= indice < len(especialidades):
+
+                especialidad_seleccionada = (
+                    especialidades[indice]
+                )
+
+        else:
+
+            for esp in especialidades:
+
+                if (
+                    normalizar(esp)
+                    ==
+                    normalizar(texto)
+                ):
+
+                    especialidad_seleccionada = esp
+                    break
+
+        if not especialidad_seleccionada:
+
+            return {
+                "respuesta":
+                "Especialidad no encontrada."
+            }
+
+        medico = (
+            db.query(Medico)
+            .filter(
+                Medico.especialidad ==
+                especialidad_seleccionada
+            )
+            .first()
+        )
+
+        guardar_sesion(
+            db,
+            telefono,
+            estado="esperando_fecha",
+            especialidad=especialidad_seleccionada,
+            medico_id=medico.id
+        )
+
+        return {
+            "respuesta":
+            "Ingrese la fecha (YYYY-MM-DD) o escriba HOY o MAÑANA."
+        }
+
+    # =====================================
+    # PASO 3
+    # FECHA
+    # =====================================
+
+    if (
+        sesion and
+        sesion.estado == "esperando_fecha"
+    ):
+
+        try:
+
+            if normalizar(texto) == "hoy":
+
+                fecha_consulta = date.today()
+
+            elif normalizar(texto) == "manana":
+
+                fecha_consulta = (
+                    date.today()
+                    + timedelta(days=1)
+                )
+
+            else:
+
+                fecha_consulta = datetime.strptime(
+                    texto,
+                    "%Y-%m-%d"
+                ).date()
+
+        except:
+
+            return {
+                "respuesta":
+                "Fecha inválida. Use YYYY-MM-DD, HOY o MAÑANA."
+            }
+
+        horarios = obtener_horarios_disponibles(
+            db,
+            sesion.medico_id,
+            fecha_consulta
+        )
+
+        if not horarios:
+
+            return {
+                "respuesta":
+                "No existen horarios disponibles."
+            }
+
+        guardar_sesion(
+            db,
+            telefono,
+            estado="esperando_horario",
+            especialidad=sesion.especialidad,
+            medico_id=sesion.medico_id,
+            fecha_seleccionada=str(fecha_consulta),
+            horarios=horarios[:5]
+        )
+
+        return {
+            "fecha":
+            str(fecha_consulta),
+            "horarios":
+            horarios[:5],
+            "respuesta":
+            "Seleccione un horario escribiendo el número."
+        }
+
+    # =====================================
+    # PASO 4
+    # HORARIO
+    # =====================================
+
+    if (
+        sesion and
+        sesion.estado == "esperando_horario"
+    ):
+
+        horarios = (
+            sesion.horarios_ofrecidos
+            .split(",")
+        )
+
+        indice = None
+
+        if texto.isdigit():
+
+            pos = int(texto) - 1
+
+            if 0 <= pos < len(horarios):
+
+                indice = pos
+
+        if indice is not None:
+
+            hora = horarios[indice]
+
+        else:
+
+            hora = texto
+
+        if hora not in horarios:
+
+            return {
+                "respuesta":
+                "Seleccione uno de los horarios mostrados."
+            }
+
+        cita = registrar_cita_desde_chat(
+            db=db,
+            fecha=sesion.fecha_seleccionada,
+            hora=hora,
+            medico_id=sesion.medico_id,
+            paciente_id=1
+        )
+
+        eliminar_sesion(
+            db,
+            telefono
+        )
+
+        return {
+            "respuesta":
+            f"Cita agendada correctamente para {sesion.fecha_seleccionada} a las {hora}"
+        }
+
+    return {
+        "respuesta":
+        "Escriba: quiero una cita"

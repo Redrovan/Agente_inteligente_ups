@@ -1,0 +1,31 @@
+<div class="container">
+
+  <h1>Médicos Registrados</h1>
+
+  <table>
+
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Especialidad</th>
+        <th>Email</th>
+      </tr>
+    </thead>
+
+    <tbody>
+
+      <tr *ngFor="let medico of medicos">
+
+        <td>{{ medico.id }}</td>
+        <td>{{ medico.nombre }}</td>
+        <td>{{ medico.especialidad }}</td>
+        <td>{{ medico.email }}</td>
+
+      </tr>
+
+    </tbody>
+
+  </table>
+
+</div>

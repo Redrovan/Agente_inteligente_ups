@@ -1,0 +1,13 @@
+venv/
+.env
+__pycache__/
+*.pyc
+
+node_modules/
+dist/
+.angular/
+
+*.bak
+*.db
+requests.json
+*.code-workspace

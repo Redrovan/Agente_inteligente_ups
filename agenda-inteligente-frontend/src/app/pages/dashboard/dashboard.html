@@ -1,0 +1,60 @@
+<div
+  class="container"
+  *ngIf="dashboard"
+>
+
+  <h1>Dashboard Agenda Inteligente</h1>
+
+  <div class="cards">
+
+    <div class="card">
+      <h2>Médicos</h2>
+      <p>{{ dashboard.total_medicos }}</p>
+    </div>
+
+    <div class="card">
+      <h2>Pacientes</h2>
+      <p>{{ dashboard.total_pacientes }}</p>
+    </div>
+
+    <div class="card">
+      <h2>Citas</h2>
+      <p>{{ dashboard.total_citas }}</p>
+    </div>
+
+    <div class="card">
+      <h2>Programadas</h2>
+      <p>{{ dashboard.citas_programadas }}</p>
+    </div>
+
+    <div class="card">
+      <h2>Canceladas</h2>
+      <p>{{ dashboard.citas_canceladas }}</p>
+    </div>
+
+    <div class="card">
+      <h2>Reagendadas</h2>
+      <p>{{ dashboard.citas_reagendadas }}</p>
+    </div>
+
+    <div class="card">
+      <h2>Hora Pico</h2>
+      <p>{{ dashboard.hora_pico }}</p>
+    </div>
+
+  </div>
+
+  <div class="grafico">
+
+    <h2>Distribución de Citas</h2>
+
+    <canvas
+      baseChart
+      [data]="pieChartData"
+      [type]="'pie'"
+    >
+    </canvas>
+
+  </div>
+
+</div>

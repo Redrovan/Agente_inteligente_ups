@@ -1,0 +1,80 @@
+<div class="container">
+
+  <h1>Gestión de Citas</h1>
+
+  <table>
+
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Médico</th>
+        <th>Paciente</th>
+        <th>Fecha</th>
+        <th>Estado</th>
+        <th>Acción</th>
+      </tr>
+    </thead>
+
+    <tbody>
+
+      <tr *ngFor="let cita of citas">
+
+        <td>{{ cita.id }}</td>
+        <td>{{ cita.medico_id }}</td>
+        <td>{{ cita.paciente_id }}</td>
+        <td>{{ cita.fecha_hora }}</td>
+
+        <td>
+
+          <span
+            [style.color]="
+              cita.estado === 'cancelada'
+              ? 'red'
+              : cita.estado === 'reagendada'
+              ? 'orange'
+              : cita.estado === 'confirmada'
+              ? '#22c55e'
+              : 'green'
+            "
+          >
+            {{ cita.estado }}
+          </span>
+
+        </td>
+
+        <td>
+
+          <!-- CONFIRMAR -->
+
+          <button
+            *ngIf="
+              cita.estado === 'programada' ||
+              cita.estado === 'reagendada'
+            "
+            class="btn-confirmar"
+            (click)="confirmar(cita.id)"
+          >
+            Confirmar
+          </button>
+
+          <!-- CANCELAR -->
+
+          <button
+            *ngIf="
+              cita.estado !== 'cancelada' &&
+              cita.estado !== 'confirmada'
+            "
+            (click)="cancelar(cita.id)"
+          >
+            Cancelar
+          </button>
+
+        </td>
+
+      </tr>
+
+    </tbody>
+
+  </table>
+
+</div>
