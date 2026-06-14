@@ -11,3 +11,4 @@ dist/
 *.db
 requests.json
 *.code-workspace
+
